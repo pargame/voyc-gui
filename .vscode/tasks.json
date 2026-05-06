@@ -5,10 +5,7 @@
             "label": "voyc-gui: Build & Run",
             "type": "shell",
             "command": "cd ${workspaceFolder}/src && mkdir -p build && cd build && cmake .. && cmake --build . && ./voyc-gui",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "problemMatcher": ["$gcc"]
         },
         {
