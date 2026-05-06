@@ -15,7 +15,7 @@ qt_add_executable(voyc-gui
 qt_add_qml_module(voyc-gui
     URI VoycGui
     VERSION 1.0
-    QML_FILES main.qml Config.qml
+    QML_FILES main.qml Config.qml MenuButton.qml UiButton.qml
 )
 
 target_link_libraries(voyc-gui PRIVATE Qt6::Quick)

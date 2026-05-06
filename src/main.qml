@@ -14,6 +14,13 @@ Window {
         id: cfg
     }
 
+    Item {
+        id: popupLayer
+        anchors.fill: parent
+        z: cfg.popupZ
+        property var activeButton: null
+    }
+
     Rectangle {
         id: menuBar
         anchors.top: parent.top
@@ -29,29 +36,38 @@ Window {
             height: parent.height
             spacing: 0
 
-            Repeater {
-                model: ["File", "Edit", "View", "Settings", "Help"]
+            MenuButton {
+                popupContainer: popupLayer
+                text: "File"
+                items: ["New (더미)", "Open (더미)", "Save (더미)"]
+            }
 
-                Rectangle {
-                    width: menuText.width + cfg.menuPadding
-                    height: parent.height
-                    color: cfg.transparent()
+            MenuButton {
+                popupContainer: popupLayer
+                text: "Edit"
+                items: ["Undo (더미)", "Redo (더미)", "Cut (더미)", "Copy (더미)", "Paste (더미)"]
+            }
 
-                    Text {
-                        id: menuText
-                        anchors.centerIn: parent
-                        text: modelData
-                        color: cfg.menuTextColor()
-                        font.pixelSize: cfg.menuFontSize
-                    }
+            MenuButton {
+                popupContainer: popupLayer
+                text: "View"
+                items: ["Zoom In (더미)", "Zoom Out (더미)", "Reset View (더미)"]
+            }
 
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onEntered: parent.color = cfg.menuHoverBg()
-                        onExited: parent.color = cfg.transparent()
-                    }
+            MenuButton {
+                popupContainer: popupLayer
+                text: "Settings"
+                items: [cfg.isDarkMode ? "Light Mode" : "Dark Mode"]
+                onItemClicked: (index) => {
+                    cfg.isDarkMode = !cfg.isDarkMode;
+                    items = [cfg.isDarkMode ? "Light Mode" : "Dark Mode"];
                 }
+            }
+
+            MenuButton {
+                popupContainer: popupLayer
+                text: "Help"
+                items: ["About (더미)"]
             }
         }
     }
@@ -72,6 +88,11 @@ Window {
             property real offsetY: 0
             property real zoomLevel: cfg.zoomMin
             property real wheelAccumulator: 0
+
+            function showZoomLabel() {
+                zoomLabel.opacity = 1;
+                zoomFadeTimer.restart();
+            }
 
             function snap(value) {
                 return Math.round(value / cfg.gridSize) * cfg.gridSize;
@@ -95,6 +116,7 @@ Window {
                 if (zoomLevel < cfg.zoomMax) {
                     zoomLevel = Math.min(cfg.zoomMax, zoomLevel + cfg.zoomStep);
                     gridCanvas.requestPaint();
+                    showZoomLabel();
                 }
             }
 
@@ -102,6 +124,7 @@ Window {
                 if (zoomLevel > cfg.zoomMin) {
                     zoomLevel = Math.max(cfg.zoomMin, zoomLevel - cfg.zoomStep);
                     gridCanvas.requestPaint();
+                    showZoomLabel();
                 }
             }
 
@@ -126,7 +149,7 @@ Window {
                     var endY = world.snap(visibleBottom) + grid;
 
                     ctx.strokeStyle = cfg.gridColor();
-                    ctx.lineWidth = 1;
+                    ctx.lineWidth = cfg.gridLineWidth;
 
                     for (var x = startX; x <= endX; x += grid) {
                         var sx = world.toScreen(x, 0).x;
@@ -156,12 +179,27 @@ Window {
             }
 
             Text {
+                id: zoomLabel
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.margins: cfg.textMargin
                 text: Math.round(world.zoomLevel * 100) + "%"
                 color: cfg.zoomTextColor()
                 font.pixelSize: cfg.zoomFontSize
+                opacity: 0
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: cfg.fadeDuration
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            }
+
+            Timer {
+                id: zoomFadeTimer
+                interval: cfg.fadeDelay
+                onTriggered: zoomLabel.opacity = 0
             }
 
             MouseArea {
