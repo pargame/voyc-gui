@@ -1,0 +1,57 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "voyc-gui: Build & Run",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}/src && mkdir -p build && cd build && cmake .. && cmake --build . && ./voyc-gui",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "voyc-gui: Build Only",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}/src && mkdir -p build && cd build && cmake .. && cmake --build .",
+            "group": "build",
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "learn-qt: 01-hello-qml",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}/learn-qt/01-hello-qml && mkdir -p build && cd build && cmake .. && cmake --build . && ./hello-qml",
+            "group": "build",
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "learn-qt: 02-canvas-basic",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}/learn-qt/02-canvas-basic && mkdir -p build && cd build && cmake .. && cmake --build . && ./canvas-basic",
+            "group": "build",
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "learn-qt: 03-mouse-event",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}/learn-qt/03-mouse-event && mkdir -p build && cd build && cmake .. && cmake --build . && ./mouse-event",
+            "group": "build",
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "learn-qt: 04-drag-object",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}/learn-qt/04-drag-object && mkdir -p build && cd build && cmake .. && cmake --build . && ./drag-object",
+            "group": "build",
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "learn-qt: 05-zoom-pan",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}/learn-qt/05-zoom-pan && mkdir -p build && cd build && cmake .. && cmake --build . && ./zoom-pan",
+            "group": "build",
+            "problemMatcher": ["$gcc"]
+        }
+    ]
+}
